@@ -1,0 +1,62 @@
+CREATE TABLE customers(
+customer_id SMALLINT PRIMARY KEY, 
+	firstname VARCHAR (50) NOT NULL,
+	lastname VARCHAR (50),
+	email_address VARCHAR (200) UNIQUE
+);
+
+SELECT * FROM CUSTOMERS;
+
+CREATE TABLE products (
+product_id SMALLINT PRIMARY KEY,
+product_name VARCHAR (50) NOT NULL,
+brand VARCHAR (50) NOT NULL,
+description VARCHAR (200),
+price integer
+);
+
+SELECT* FROM products
+
+CREATE TABLE sales(
+salesid SMALLINT PRIMARY KEY,
+productid SMALLINT REFERENCES products(product_id),
+customerid SMALLINT REFERENCES customers(customer_id),
+quantity SMALLINT,
+selling_price INTEGER NOT NULL,
+discount DECIMAL(5,1)	
+)
+
+SELECT* FROM sales
+
+--QA
+
+SELECT "salesid", "customer_id", "firstname", "lastname", "email_address"
+FROM sales
+JOIN customers
+ON sales.customerid = customers.customer_id;
+
+--QB
+
+SELECT "product_id", "product_name", "salesid"
+FROM products
+LEFT OUTER JOIN sales
+ON products.product_id = sales.productid
+WHERE salesid IS NULL
+
+--QC
+
+SELECT "product_id", "salesid", "product_name", "brand", "description", "price", "selling_price", "quantity"
+FROM products
+JOIN sales
+ON products.product_id = sales.productid;
+
+--QD
+
+SELECT "salesid", "product_id", "product_name", "brand", "description", "price", "quantity", "selling_price", "customer_id", "firstname", "lastname", "email_address" 
+FROM sales
+JOIN products
+ON sales.productid = products.product_id
+JOIN customers
+ON sales.customerid = customers.customer_id
+
+			
